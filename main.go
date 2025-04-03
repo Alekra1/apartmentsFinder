@@ -5,22 +5,18 @@ import(
 	"github.com/gocolly/colly"
 )
 
-type Dictionary map[string]string
-
 type Apartament struct {
 	url, name string
-	price int
-
 }
 
 func main() {
-	//var apartaments []Apartament
+	var apartaments []Apartament
 
 	//domain := "https://www.alo.bg"
 
 	//var test string
 
-	url := "https://www.alo.bg/obiavi/imoti-naemi/apartamenti/?region_id=1&order_by=price-asc&io=1"
+	url := "https://www.alo.bg/obiavi/imoti-naemi/apartamenti/?region_id=1&order_by=time-desc&io=1"
 	collector := colly.NewCollector()
 
 	collector.OnRequest(func(r *colly.Request) {
@@ -33,29 +29,17 @@ func main() {
 	collector.OnError(func(r *colly.Response, e error) {
 		fmt.Println("Blimey, an error occurred!:", e)
 	})
-	//collector.OnHTML(".listvip-item-title", func(e *colly.HTMLElement) {
-	//	//fmt.Println("found", "content_container_list")
-	//	//apartament := Apartament{}
-	//	//apartaments_dictionary := Dictionary{}
-	//	fmt.Println(e.Text)
-	//
-	//})
-	startingPoint := "javascript:order_by('14')"
-	collector.OnHTML("a[href]", func(e *colly.HTMLElement) {
-		//fmt.Println("found", "content_container_list")
+
+	collector.OnHTML(".listvip-item-header", func(e *colly.HTMLElement) {
 		//apartament := Apartament{}
 		//apartaments_dictionary := Dictionary{}
-		if e.Attr("href") == startingPoint{
 
-		}
-		//fmt.Println(e.Attr("title"))
-		fmt.Println(e.Attr("href"))
-		//e.ForEach("a[href]", func(i int, element *colly.HTMLElement) {
-		//	link := e.Attr("href")
-		//	e.Request.Visit(link)
-		//})
+		fmt.Println(e.ChildAttrs("a", "href"))
+		fmt.Println(e.ChildAttrs("a", "title"))
 
 	})
+
+
 
 	collector.Visit(url)
 }
