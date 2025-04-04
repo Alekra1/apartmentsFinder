@@ -1,16 +1,17 @@
 package main
 
-import(
+import (
 	"fmt"
+
 	"github.com/gocolly/colly"
 )
 
-type Apartament struct {
-	url, name string
+type Apartaments struct {
+	url, name []string
 }
 
 func main() {
-	var apartaments []Apartament
+	//var apartaments []Apartament
 
 	//domain := "https://www.alo.bg"
 
@@ -30,16 +31,16 @@ func main() {
 		fmt.Println("Blimey, an error occurred!:", e)
 	})
 
-	collector.OnHTML(".listvip-item-header", func(e *colly.HTMLElement) {
-		//apartament := Apartament{}
-		//apartaments_dictionary := Dictionary{}
+	apartaments := Apartaments{}
 
-		fmt.Println(e.ChildAttrs("a", "href"))
-		fmt.Println(e.ChildAttrs("a", "title"))
+	collector.OnHTML(".listvip-item-header", func(e *colly.HTMLElement) {
+		apartaments.name = e.ChildAttrs("a", "title")
+		apartaments.url = e.ChildAttrs("a", "href")
+
+		fmt.Println(apartaments.name)
+		fmt.Println(apartaments.url)
 
 	})
-
-
 
 	collector.Visit(url)
 }
